@@ -18,10 +18,16 @@ export default function ClientForm() {
 
   useEffect(() => {
     if (id) {
-      fetch(`http://localhost:3005/clients/${id}`)
-        .then((res) => res.json())
-        .then((data) => setFormData(data))
-        .catch((error) => console.error("Error fetching client data:", error));
+      const fetchClient = async () => {
+        try {
+          const res = await fetch(`http://localhost:3005/clients/${id}`);
+          const data = await res.json();
+          setFormData(data.client || data);
+        } catch (error) {
+          console.error("Error fetching client data:", error);
+        }
+      };
+      fetchClient();
     }
   }, [id]);
 
