@@ -10,7 +10,7 @@ export default function ClientDetails() {
       try {
         const res = await fetch(`http://localhost:3005/clients/${id}`);
         const data = await res.json();
-        setClient(data);
+        setClient(data.client);
       } catch (error) {
         console.error("Error fetching client details:", error);
       }
@@ -32,16 +32,16 @@ export default function ClientDetails() {
         <p>
           <strong>NIP:</strong> {client.nip}
         </p>
-        {client.adress && (
+        {client.address && (
           <div className="address-block">
             <p>
-              <strong>Adress:</strong>
+              <strong>Address:</strong>
             </p>
             <p>
-              {client.adress.street} {client.adress.suite}
+              {client.address.street} {client.address.suite}
             </p>
             <p>
-              {client.adress.city}, {client.adress.zipcode}
+              {client.address.city}, {client.address.zipcode}
             </p>
           </div>
         )}
@@ -50,7 +50,7 @@ export default function ClientDetails() {
         <Link to="/clients" className="btn btn-back">
           Back to Client List
         </Link>
-        <Link to={`/clients/edit/${client._id}`} className="btn btn-edit">
+        <Link to={`/clients/${client._id}/edit`} className="btn btn-edit">
           Edit Client
         </Link>
       </div>

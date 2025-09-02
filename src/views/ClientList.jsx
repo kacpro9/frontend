@@ -9,7 +9,8 @@ export default function ClientList() {
       try {
         const res = await fetch("http://localhost:3005/clients");
         const data = await res.json();
-        setClients(data);
+        console.log("API response:", data);
+        setClients(data.clients);
       } catch (error) {
         console.error("Error fetching clients:", error);
       }
@@ -37,8 +38,8 @@ export default function ClientList() {
       <h2>Client List</h2>
       <ul className="client-list">
         {clients.map((client) => (
-          <li key={client.id} className="client-item">
-            <div classnName="client-info">
+          <li key={client._id} className="client-item">
+            <div className="client-info">
               <span>{client.name}</span>
               <span>NIP: {client.nip}</span>
             </div>
@@ -46,7 +47,7 @@ export default function ClientList() {
               <Link to={`/clients/${client._id}`} className="btn">
                 View
               </Link>
-              <Link to={`/clients/edit/${client._id}`} className="btn btn-edit">
+              <Link to={`/clients/${client._id}/edit`} className="btn btn-edit">
                 Edit
               </Link>
               <button
@@ -60,7 +61,7 @@ export default function ClientList() {
         ))}
       </ul>
 
-      <div childrenlassName="add-client">
+      <div className="add-client">
         <Link to="/clients/new" className="btn btn-add">
           Add New Client
         </Link>
