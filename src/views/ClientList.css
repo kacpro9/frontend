@@ -1,0 +1,82 @@
+.client-list-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.client-list-conatiner h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.client-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.client-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fafafa;
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.client-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.client-acitons {
+  display: flex;
+  gap: 10px;
+}
+
+.add-client {
+  text-align: center;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .client-list-conatiner {
+    padding: 16px;
+  }
+
+  .client-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .client-actions {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .client-actions .btn {
+    flex: 1 1 calc(50% - 8px);
+    text-align: center;
+  }
+
+  .btn-add {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .client-item {
+    padding: 12px;
+  }
+
+  .client-actions .btn {
+    flex: 1 1 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+}
