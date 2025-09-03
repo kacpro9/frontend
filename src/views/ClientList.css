@@ -4,7 +4,7 @@
   margin: 0 auto;
 }
 
-.client-list-conatiner h2 {
+.client-list-container h2 {
   text-align: center;
   margin-bottom: 20px;
 }
@@ -31,7 +31,7 @@
   flex-direction: column;
 }
 
-.client-acitons {
+.client-actions {
   display: flex;
   gap: 10px;
 }
@@ -42,7 +42,7 @@
 }
 
 @media (max-width: 768px) {
-  .client-list-conatiner {
+  .client-list-container {
     padding: 16px;
   }
 
