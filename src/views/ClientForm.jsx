@@ -29,6 +29,17 @@ export default function ClientForm() {
         }
       };
       fetchClient();
+    } else {
+      setFormData({
+        name: "",
+        nip: "",
+        address: {
+          street: "",
+          suite: "",
+          city: "",
+          zipcode: "",
+        },
+      });
     }
   }, [id]);
 
@@ -140,9 +151,20 @@ export default function ClientForm() {
             />
           </label>
         </fieldset>
-        <button type="submit" className="btn btn-submit">
-          {id ? "Update Client" : "Add Client"}
-        </button>
+        <div className="form-actions">
+          <button type="submit" className="btn btn-submit">
+            {id ? "Update Client" : "Add Client"}
+          </button>
+          {id && (
+            <button
+              type="button"
+              className="btn btn-cancel"
+              onClick={() => navigate("/clients")}
+            >
+              Cancel
+            </button>
+          )}
+        </div>
       </form>
     </div>
   );

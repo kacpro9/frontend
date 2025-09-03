@@ -85,6 +85,21 @@ a {
   }
 }
 
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-cancel {
+  background: #95a5a6;
+  color: white;
+}
+
+.btn-cancel:hover {
+  background: #7f8c8d;
+}
+
 @media (max-width: 480px) {
   .navbar .container {
     flex-direction: column;
