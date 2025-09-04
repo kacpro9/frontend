@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./ClientForm.css";
+
+const INIT_FORM_STATE = {
+  name: "",
+  nip: "",
+  address: {
+    street: "",
+    suite: "",
+    city: "",
+    zipcode: "",
+  },
+};
 
 export default function ClientForm() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    name: "",
-    nip: "",
-    address: {
-      street: "",
-      suite: "",
-      city: "",
-      zipcode: "",
-    },
-  });
+  const [formData, setFormData] = useState(INIT_FORM_STATE);
 
   useEffect(() => {
     if (id) {
@@ -30,16 +32,7 @@ export default function ClientForm() {
       };
       fetchClient();
     } else {
-      setFormData({
-        name: "",
-        nip: "",
-        address: {
-          street: "",
-          suite: "",
-          city: "",
-          zipcode: "",
-        },
-      });
+      setFormData(INIT_FORM_STATE);
     }
   }, [id]);
 

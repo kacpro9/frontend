@@ -5,8 +5,7 @@ import "./ClientList.css";
 export default function ClientList() {
   const [clients, setClients] = useState([]);
 
-  useEffect(() => {
-    const getClients = async () => {
+  const getClients = async () => {
       try {
         const res = await fetch("http://localhost:3005/clients");
         const data = await res.json();
@@ -16,8 +15,7 @@ export default function ClientList() {
         console.error("Error fetching clients:", error);
       }
     };
-    getClients();
-  }, []);
+
   const handleDelete = async (clientId) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this client?"
@@ -28,11 +26,15 @@ export default function ClientList() {
       await fetch("http://localhost:3005/clients/" + clientId, {
         method: "DELETE",
       });
-      setClients(clients.filter((client) => client.id !== clientId));
+      getClients();
     } catch (error) {
       console.error("Error deleting client:", error);
     }
   };
+
+   useEffect(() => {
+    getClients();
+  }, []);
 
   return (
     <div className="client-list-container">
