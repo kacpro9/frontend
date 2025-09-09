@@ -5,6 +5,7 @@ import "./ClientDetails.css";
 export default function ClientDetails() {
   const { id } = useParams();
   const [client, setClient] = useState(null);
+  
 
   useEffect(() => {
     const fetchClient = async () => {
@@ -47,12 +48,26 @@ export default function ClientDetails() {
           </div>
         )}
       </div>
+      <div className="actions-list">
+        <h3>Associated Actions</h3>
+        <ul>
+          {client.actions?.map((action) => (
+            <li key={action._id}>
+              <strong>{action.date}</strong>
+              {action.type} : {action.description}
+            </li>
+          ))}
+        </ul>
+      </div>
       <div className="actions">
         <Link to="/clients" className="btn btn-back">
           Back to Client List
         </Link>
         <Link to={`/clients/${client._id}/edit`} className="btn btn-edit">
           Edit Client
+        </Link>
+        <Link to={`/clients/${client._id}/actions/new`} className="btn btn-add">
+          Add Action
         </Link>
       </div>
     </div>
