@@ -1,24 +1,30 @@
 import { useParams, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import ActionModal from "../components/ActionModal";
 import "./ClientDetails.css";
 
 export default function ClientDetails() {
   const { id } = useParams();
   const [client, setClient] = useState(null);
-  
+  const [showModal, setShowModal] = useState(false);
+
+  const fetchClient = useCallback(async () => {
+    try {
+      const res = await fetch(`http://localhost:3005/clients/${id}`);
+      const data = await res.json();
+      setClient(data.client);
+    } catch (error) {
+      console.error("Error fetching client details:", error);
+    }
+  }, [id]);
 
   useEffect(() => {
-    const fetchClient = async () => {
-      try {
-        const res = await fetch(`http://localhost:3005/clients/${id}`);
-        const data = await res.json();
-        setClient(data.client);
-      } catch (error) {
-        console.error("Error fetching client details:", error);
-      }
-    };
     fetchClient();
-  }, [id]);
+  }, [fetchClient]);
+
+  const handleActionAdded = () => {
+    fetchClient();
+  };
 
   if (!client) {
     return <div>Client not found!</div>;
@@ -26,11 +32,9 @@ export default function ClientDetails() {
 
   return (
     <div className="client-details-container">
-      <h2>Client Details</h2>
+      <h1>Client Details</h1>
       <div className="client-details">
-        <p>
-          <strong>Name:</strong> {client.name}
-        </p>
+        <h2>{client.name}</h2>
         <p>
           <strong>NIP:</strong> {client.nip}
         </p>
@@ -50,14 +54,16 @@ export default function ClientDetails() {
       </div>
       <div className="actions-list">
         <h3>Associated Actions</h3>
-        <ul>
+        <div className="actions-list-holder">
           {client.actions?.map((action) => (
-            <li key={action._id}>
-              <strong>{action.date}</strong>
-              {action.type} : {action.description}
-            </li>
+            <div key={action._id} className="action-item">
+              <div>{action.date}</div>
+              <div>{action.name}</div>
+              <div className="description">{action.description}</div>
+              <div>buttons</div>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
       <div className="actions">
         <Link to="/clients" className="btn btn-back">
@@ -66,10 +72,20 @@ export default function ClientDetails() {
         <Link to={`/clients/${client._id}/edit`} className="btn btn-edit">
           Edit Client
         </Link>
-        <Link to={`/clients/${client._id}/actions/new`} className="btn btn-add">
+        <button
+          onClick={() => setShowModal(true)}
+          className="btn btn-add-action"
+        >
           Add Action
-        </Link>
+        </button>
       </div>
+      {showModal && (
+        <ActionModal
+          clientId={client._id}
+          onClose={() => setShowModal(false)}
+          onActionAdded={handleActionAdded}
+        />
+      )}
     </div>
   );
 }

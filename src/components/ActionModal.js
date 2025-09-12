@@ -2,7 +2,7 @@ import { useState } from "react";
 
 export default function ActionModal({ clientId, onClose, onActionAdded }) {
   const [action, setAction] = useState({
-    type: "",
+    name: "",
     description: "",
     date: new Date().toISOString().split("T")[0],
   });
@@ -10,22 +10,21 @@ export default function ActionModal({ clientId, onClose, onActionAdded }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(
-        `http://localhost:3005/clients/${clientId}/actions`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(action),
-        }
-      );
-      if (!res.ok) throw new Error("Failed to add action");
+      const res = await fetch(`http://localhost:3005/actions/${clientId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(action),
+      });
 
       const data = await res.json();
+
+      if (!res.ok) throw new Error("Failed to add action");
+
       onActionAdded(data.action);
       setAction({
-        type: "",
+        name: "",
         description: "",
         date: new Date().toISOString().split("T")[0],
       });
@@ -45,8 +44,8 @@ export default function ActionModal({ clientId, onClose, onActionAdded }) {
             <label>Type:</label>
             <input
               type="text"
-              value={action.type}
-              onChange={(e) => setAction({ ...action, type: e.target.value })}
+              value={action.name}
+              onChange={(e) => setAction({ ...action, name: e.target.value })}
               required
             />
           </div>
