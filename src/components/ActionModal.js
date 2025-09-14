@@ -1,22 +1,43 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import "./ActionModal.css";
 
-export default function ActionModal({ clientId, onClose, onActionAdded }) {
+export default function ActionModal({
+  clientId,
+  actionToEdit,
+  onClose,
+  onActionAdded,
+}) {
   const [action, setAction] = useState({
     name: "",
     description: "",
     date: new Date().toISOString().split("T")[0],
   });
 
+  useEffect(() => {
+    if (actionToEdit) {
+      setAction({
+        name: actionToEdit.name,
+        description: actionToEdit.description,
+        date: new Date(actionToEdit.date).toISOString().split("T")[0],
+      });
+    }
+  }, [actionToEdit]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:3005/actions/${clientId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(action),
-      });
+      const res = await fetch(
+        actionToEdit
+          ? `http://localhost:3005/actions/${actionToEdit._id}`
+          : `http://localhost:3005/actions/${clientId}`,
+        {
+          method: actionToEdit ? "PUT" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(action),
+        }
+      );
 
       const data = await res.json();
 
@@ -37,17 +58,23 @@ export default function ActionModal({ clientId, onClose, onActionAdded }) {
 
   return (
     <div className="modal-overlay">
-      <div className="modal-content">
-        <h2>Add New Action</h2>
+      <div className="action-modal-container">
+        <h2>{actionToEdit ? "Edit Action" : "Add New Action"}</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Type:</label>
-            <input
-              type="text"
+            <label> Action Type:</label>
+            <select
               value={action.name}
               onChange={(e) => setAction({ ...action, name: e.target.value })}
               required
-            />
+            >
+              <option value=""> -- Select action type -- </option>
+              <option value="Email">Email</option>
+              <option value="Call">Call</option>
+              <option value="Meeting">Meeting</option>
+              <option value="Follow-up">Follow-up</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
           <div className="form-group">
             <label>Description:</label>
@@ -70,7 +97,7 @@ export default function ActionModal({ clientId, onClose, onActionAdded }) {
           </div>
           <div className="modal-actions">
             <button type="submit" className="btn btn-primary">
-              Send
+              {actionToEdit ? "Update" : "Send"}
             </button>
             <button
               type="button"

@@ -7,6 +7,7 @@ export default function ClientDetails() {
   const { id } = useParams();
   const [client, setClient] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [editingActionId, setEditingActionId] = useState(null);
 
   const fetchClient = useCallback(async () => {
     try {
@@ -57,10 +58,40 @@ export default function ClientDetails() {
         <div className="actions-list-holder">
           {client.actions?.map((action) => (
             <div key={action._id} className="action-item">
-              <div>{action.date}</div>
+              <div>{new Date(action.date).toLocaleDateString()}</div>
               <div>{action.name}</div>
               <div className="description">{action.description}</div>
-              <div>buttons</div>
+              <div className="action-buttons">
+                <button
+                  className="btn btn-edit"
+                  onClick={() => {
+                    setEditingActionId(action);
+                    setShowModal(true);
+                  }}
+                >
+                  Edit
+                </button>
+                <button
+                  className="btn btn-delete"
+                  onClick={async () => {
+                    try {
+                      const res = await fetch(
+                        `http://localhost:3005/actions/${action._id}`,
+                        {
+                          method: "DELETE",
+                        }
+                      );
+                      if (!res.ok) throw new Error("Failed to delete action");
+                      fetchClient();
+                    } catch (error) {
+                      console.error("Error deleting action:", error);
+                      alert("Error deleting action. Please try again.");
+                    }
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -73,7 +104,10 @@ export default function ClientDetails() {
           Edit Client
         </Link>
         <button
-          onClick={() => setShowModal(true)}
+          onClick={() => {
+            setEditingActionId(null);
+            setShowModal(true);
+          }}
           className="btn btn-add-action"
         >
           Add Action
@@ -82,6 +116,7 @@ export default function ClientDetails() {
       {showModal && (
         <ActionModal
           clientId={client._id}
+          actionToEdit={editingActionId}
           onClose={() => setShowModal(false)}
           onActionAdded={handleActionAdded}
         />
