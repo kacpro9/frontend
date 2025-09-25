@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import ActionModal from "../components/ActionModal";
 import "./ClientDetails.css";
+import axios from "axios";
 
 export default function ClientDetails() {
   const { id } = useParams();
@@ -11,9 +12,8 @@ export default function ClientDetails() {
 
   const fetchClient = useCallback(async () => {
     try {
-      const res = await fetch(`http://localhost:3005/clients/${id}`);
-      const data = await res.json();
-      setClient(data.client);
+      const res = await axios.get(`http://localhost:3005/clients/${id}`);
+      setClient(res.data.client);
     } catch (error) {
       console.error("Error fetching client details:", error);
     }

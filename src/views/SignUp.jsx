@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import axios from "axios";
 
 const SignUp = (props) => {
@@ -29,20 +29,19 @@ const SignUp = (props) => {
   };
 
   const validate = () => {
-    let naeErrors = {};
+    let newErrors = {};
 
     if (!formData.email.includes("@")) {
-      nameErrors.email = "Invalid email address";
+      newErrors.email = "Invalid email address";
     }
+
+    if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
-
-  if (formData.password.length < 6) {
-    nameErrors.password = "Password must be at least 6 characters";
-  }
-
-  setErrors(newErrors);
-  return Object.keys(newErrors).length === 0;
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -59,8 +58,6 @@ const SignUp = (props) => {
       }
     } catch (error) {
       console.error("Sign up error:", error);
-      error.response?.data?.message ||
-        "Error creating account. Please try again.";
     }
   };
 

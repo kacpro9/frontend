@@ -3,7 +3,7 @@ import axios from "axios";
 import { Navigate } from "react-router-dom";
 
 const Login = ({ user, setUser }) => {
-  const [formaData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
@@ -14,7 +14,7 @@ const Login = ({ user, setUser }) => {
     const { name, value } = e.target;
 
     setFormData({
-      ...formaData,
+      ...formData,
       [name]: value,
     });
   };
@@ -24,17 +24,17 @@ const Login = ({ user, setUser }) => {
 
     try {
       const res = await axios.post("http://localhost:3005/auth/login", {
-        email: formaData.email,
-        password: formaData.password,
+        email: formData.email,
+        password: formData.password,
       });
 
       if (res.data.token) {
         setLoginMessage("Login successful!");
 
-        setUser({ email: formaData.email, token: res.data.token });
+        setUser({ email: formData.email, token: res.data.token });
         localStorage.setItem(
           "user",
-          JSON.stringify({ email: formaData.email, token: res.data.token })
+          JSON.stringify({ email: formData.email, token: res.data.token })
         );
       } else {
         setLoginMessage("Login failed. Please try again.");

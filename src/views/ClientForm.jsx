@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./ClientForm.css";
 
 const INIT_FORM_STATE = {
@@ -23,8 +24,8 @@ export default function ClientForm() {
     if (id) {
       const fetchClient = async () => {
         try {
-          const res = await fetch(`http://localhost:3005/clients/${id}`);
-          const data = await res.json();
+          const res = await axios.get(`http://localhost:3005/clients/${id}`);
+          const data = await res.data;
           setFormData(data.client || data);
         } catch (error) {
           console.error("Error fetching client data:", error);
@@ -58,23 +59,16 @@ export default function ClientForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const method = id ? "PUT" : "POST";
-      const url = id
-        ? `http://localhost:3005/clients/${id}`
-        : "http://localhost:3005/clients";
-
-      const res = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+      const res = await axios({
+        method: id ? "PUT" : "POST",
+        url: id
+          ? `http://localhost:3005/clients/${id}`
+          : "http://localhost:3005/clients",
+        data: formData,
       });
 
-      if (res.ok) {
+      if (res.status === 200 || res.status === 201) {
         navigate("/clients");
-      } else {
-        console.error("Error saving client data", res.status);
       }
     } catch (error) {
       console.error("Error submitting form:", error);

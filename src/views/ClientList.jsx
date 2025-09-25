@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./ClientList.css";
+import axios from "axios";
 
 export default function ClientList() {
   const [clients, setClients] = useState([]);
 
   const getClients = async () => {
       try {
-        const res = await fetch("http://localhost:3005/clients");
-        const data = await res.json();
-        console.log("API response:", data);
-        setClients(data.clients);
+        console.log("Header being send:", axios.defaults.headers.common);
+        const res = await axios.get("http://localhost:3005/clients");
+        setClients(res.data.clients);
       } catch (error) {
         console.error("Error fetching clients:", error);
       }
@@ -23,7 +23,7 @@ export default function ClientList() {
     if (!confirmed) return;
 
     try {
-      await fetch("http://localhost:3005/clients/" + clientId, {
+      await axios.delete("http://localhost:3005/clients/" + clientId, {
         method: "DELETE",
       });
       getClients();
