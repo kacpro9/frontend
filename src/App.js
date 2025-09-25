@@ -32,7 +32,6 @@ function App() {
 
       <main className="main-content">
         <Routes>
-          <Route path="/" element={<ClientList />} />
           <Route path="/clients" element={<ClientList />} />
           <Route path="/clients/new" element={<ClientForm />} />
           <Route path="/clients/:id/edit" element={<ClientForm />} />
