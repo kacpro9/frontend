@@ -27,6 +27,10 @@ function App() {
           <Link to="/clients/new" className="nav-link">
             Add Client
           </Link>
+          <Link to="/signup" className="nav-link">
+            Sign Up
+          </Link>
+          <Link to="/login" className="nav-link">Login</Link>
         </div>
       </nav>
 
