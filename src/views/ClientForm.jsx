@@ -25,7 +25,7 @@ export default function ClientForm() {
       const fetchClient = async () => {
         try {
           const res = await axios.get(`http://localhost:3005/clients/${id}`);
-          const data = await res.data;
+          const data = res.data;
           setFormData(data.client || data);
         } catch (error) {
           console.error("Error fetching client data:", error);

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import "./ActionModal.css";
 
 export default function ActionModal({
@@ -26,24 +27,19 @@ export default function ActionModal({
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(
-        actionToEdit
-          ? `http://localhost:3005/actions/${actionToEdit._id}`
-          : `http://localhost:3005/actions/${clientId}`,
-        {
-          method: actionToEdit ? "PUT" : "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(action),
-        }
-      );
+      const url = actionToEdit
+        ? `http://localhost:3005/actions/${actionToEdit._id}`
+        : `http://localhost:3005/actions/${clientId}`;
 
-      const data = await res.json();
+      const method = actionToEdit ? "put" : "post";
 
-      if (!res.ok) throw new Error("Failed to add action");
+      const res = await axios({
+        method,
+        url,
+        data: action,
+      });
 
-      onActionAdded(data.action);
+      onActionAdded(res.data.action);
       setAction({
         name: "",
         description: "",

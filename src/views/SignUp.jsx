@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 
+import "./SignUp.css";
+
 const SignUp = (props) => {
   const [formData, setFormData] = useState({
     email: "",

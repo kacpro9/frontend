@@ -75,13 +75,11 @@ export default function ClientDetails() {
                   className="btn btn-delete"
                   onClick={async () => {
                     try {
-                      const res = await fetch(
-                        `http://localhost:3005/actions/${action._id}`,
-                        {
-                          method: "DELETE",
-                        }
+                      const res = await axios.delete(
+                        `http://localhost:3005/actions/${action._id}`
                       );
-                      if (!res.ok) throw new Error("Failed to delete action");
+                      console.log("Delete response: ", res);
+                      if (res.status !==200) throw new Error("Failed to delete action");
                       fetchClient();
                     } catch (error) {
                       console.error("Error deleting action:", error);

@@ -2,6 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
 
+import "./Login.css"
+
 const Login = ({ user, setUser }) => {
   const [formData, setFormData] = useState({
     email: "",
@@ -27,6 +29,8 @@ const Login = ({ user, setUser }) => {
         email: formData.email,
         password: formData.password,
       });
+
+      console.log("Token from backend:", res.data.token);
 
       if (res.data.token) {
         setLoginMessage("Login successful!");
