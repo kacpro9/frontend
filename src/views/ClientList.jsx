@@ -47,10 +47,10 @@ export default function ClientList() {
               <span>NIP: {client.nip}</span>
             </div>
             <div className="client-actions">
-              <Link to={`/clients/${client._id}`} className="btn">
+              <Link to={`/${client._id}`} className="btn">
                 View
               </Link>
-              <Link to={`/clients/${client._id}/edit`} className="btn btn-edit">
+              <Link to={`/${client._id}/edit`} className="btn btn-edit">
                 Edit
               </Link>
               <button

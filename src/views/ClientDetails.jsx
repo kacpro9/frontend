@@ -95,10 +95,10 @@ export default function ClientDetails() {
         </div>
       </div>
       <div className="actions">
-        <Link to="/clients" className="btn btn-back">
+        <Link to="/" className="btn btn-back">
           Back to Client List
         </Link>
-        <Link to={`/clients/${client._id}/edit`} className="btn btn-edit">
+        <Link to={`/${client._id}/edit`} className="btn btn-edit">
           Edit Client
         </Link>
         <button

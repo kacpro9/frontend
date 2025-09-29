@@ -55,7 +55,7 @@ const SignUp = (props) => {
       });
 
       if (res.status === 201) {
-        setSignUpMessage("Registration successful! You can now log in.");
+        setSignUpMessage("Registration successful! Go to login.");
         setSignUpDone(true);
       }
     } catch (error) {
