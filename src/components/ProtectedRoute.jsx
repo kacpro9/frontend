@@ -1,10 +1,11 @@
 import { Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 const ProtectedRoute = ({ children }) => {
+  const { user } = useAuth();
   const location = useLocation();
-  const token = JSON.parse(localStorage.getItem("user"))?.token;
 
-  if (!token) {
+  if (!user?.token) {
     return (
       <Navigate
         to="/login"
@@ -14,7 +15,7 @@ const ProtectedRoute = ({ children }) => {
     );
   }
 
-  return <>{children}</>;
+  return children;
 };
 
 export default ProtectedRoute;

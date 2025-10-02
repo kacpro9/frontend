@@ -2,19 +2,23 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./ClientList.css";
 import axios from "axios";
+import { useAuth } from "../hooks/useAuth";
 
 export default function ClientList() {
+
+  const { user, setUser, checkIsUserLogged } = useAuth();
+
   const [clients, setClients] = useState([]);
 
+
   const getClients = async () => {
-      try {
-        console.log("Header being send:", axios.defaults.headers.common);
-        const res = await axios.get("http://localhost:3005/clients");
-        setClients(res.data.clients);
-      } catch (error) {
-        console.error("Error fetching clients:", error);
-      }
-    };
+    try {
+      const res = await axios.get("http://localhost:3005/clients");
+      setClients(res.data.clients);
+    } catch (error) {
+      console.error("Error fetching clients:", error);
+    }
+  };
 
   const handleDelete = async (clientId) => {
     const confirmed = window.confirm(
@@ -32,7 +36,7 @@ export default function ClientList() {
     }
   };
 
-   useEffect(() => {
+  useEffect(() => {
     getClients();
   }, []);
 

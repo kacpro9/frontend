@@ -6,23 +6,12 @@ import SignUp from "./views/SignUp";
 import Login from "./views/Login";
 
 import "./App.css";
-import axios from "axios";
-import { useState } from "react";
+
 import ProtectedRoute from "./components/ProtectedRoute";
+import { useAuth } from "./hooks/useAuth";
 
 function App() {
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user")) || null
-  );
-
-  axios.defaults.headers.common["Authorization"] =
-    "Bearer " + (user ? user.token : "");
-
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-    window.location.href = "/login";
-  };
+  const { user, logout } = useAuth();
 
   return (
     <Router>
@@ -36,7 +25,7 @@ function App() {
               <Link to="/new" className="nav-link">
                 Add Client
               </Link>
-              <button onClick={handleLogout} className="nav-link logout-btn">
+              <button onClick={logout} className="nav-link logout-btn">
                 Logout
               </button>
             </>
@@ -88,10 +77,7 @@ function App() {
             }
           />
           <Route path="/signup" element={<SignUp />} />
-          <Route
-            path="/login"
-            element={<Login user={user} setUser={setUser} />}
-          />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </main>
     </Router>

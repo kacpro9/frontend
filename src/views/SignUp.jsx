@@ -1,10 +1,14 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../hooks/useAuth";
 
 import "./SignUp.css";
 
-const SignUp = (props) => {
+const SignUp = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -57,15 +61,16 @@ const SignUp = (props) => {
       if (res.status === 201) {
         setSignUpMessage("Registration successful! Go to login.");
         setSignUpDone(true);
+
+        setTimeout(() => navigate("/login"), 2000);
       }
     } catch (error) {
       console.error("Sign up error:", error);
     }
   };
-
+  if (user) return <Navigate to="/" />;
   return (
     <div className="signup">
-      {props.user && <Navigate to="/" />}
       <form onSubmit={handleSubmit}>
         {signUpMessage && <h2>{signUpMessage}</h2>}
         <input

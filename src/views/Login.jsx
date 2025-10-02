@@ -1,10 +1,15 @@
 import { useState } from "react";
 import axios from "axios";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
-import "./Login.css"
+import "./Login.css";
 
-const Login = ({ user, setUser }) => {
+const Login = () => {
+  const navigate = useNavigate();
+
+  const { user, setUser } = useAuth();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -33,13 +38,13 @@ const Login = ({ user, setUser }) => {
       console.log("Token from backend:", res.data.token);
 
       if (res.data.token) {
+        const userData = { email: formData.email, token: res.data.token };
+
         setLoginMessage("Login successful!");
 
-        setUser({ email: formData.email, token: res.data.token });
-        localStorage.setItem(
-          "user",
-          JSON.stringify({ email: formData.email, token: res.data.token })
-        );
+        setUser(userData);
+        localStorage.setItem("user", JSON.stringify(userData));
+        navigate("/");
       } else {
         setLoginMessage("Login failed. Please try again.");
       }
@@ -49,9 +54,10 @@ const Login = ({ user, setUser }) => {
     }
   };
 
+  if (user) return <Navigate to="/" />;
+
   return (
     <div className="login">
-      {user && <Navigate to="/" />}
       <form onSubmit={handleSubmit}>
         {loginMessage && <h2>{loginMessage}</h2>}
         <input
