@@ -1,21 +1,20 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./ClientList.css";
 import axios from "axios";
-import { useAuth } from "../hooks/useAuth";
+import { AuthContext } from "../context/AuthContextProvider";
 
 export default function ClientList() {
-
-  const { user, setUser, checkIsUserLogged } = useAuth();
+  const { checkIsUserLogged } = useContext(AuthContext);
 
   const [clients, setClients] = useState([]);
-
 
   const getClients = async () => {
     try {
       const res = await axios.get("http://localhost:3005/clients");
       setClients(res.data.clients);
     } catch (error) {
+      checkIsUserLogged(error.status);
       console.error("Error fetching clients:", error);
     }
   };
@@ -69,7 +68,7 @@ export default function ClientList() {
       </ul>
 
       <div className="add-client">
-        <Link to="/clients/new" className="btn btn-add">
+        <Link to="/new" className="btn btn-add">
           Add New Client
         </Link>
       </div>

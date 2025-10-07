@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useAuth } from "../hooks/useAuth";
+import { AuthContext } from "../context/AuthContextProvider";
 
 import "./SignUp.css";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     email: "",

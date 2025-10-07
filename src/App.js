@@ -8,10 +8,12 @@ import Login from "./views/Login";
 import "./App.css";
 
 import ProtectedRoute from "./components/ProtectedRoute";
-import { useAuth } from "./hooks/useAuth";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContextProvider";
+
 
 function App() {
-  const { user, logout } = useAuth();
+  const { user, logout } = useContext(AuthContext);
 
   return (
     <Router>
