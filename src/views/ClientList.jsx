@@ -8,11 +8,16 @@ export default function ClientList() {
   const { checkIsUserLogged } = useContext(AuthContext);
 
   const [clients, setClients] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState(null);
 
   const getClients = async () => {
     try {
-      const res = await axios.get("http://localhost:3005/clients");
+      const res = await axios.get(
+        `http://localhost:3005/clients?page=${page}&limit=3`
+      );
       setClients(res.data.clients);
+      setPagination(res.data.pagination);
     } catch (error) {
       checkIsUserLogged(error.status);
       console.error("Error fetching clients:", error);
@@ -37,7 +42,7 @@ export default function ClientList() {
 
   useEffect(() => {
     getClients();
-  }, []);
+  }, [page]);
 
   return (
     <div className="client-list-container">
@@ -67,6 +72,27 @@ export default function ClientList() {
         ))}
       </ul>
 
+      {pagination && (
+        <div className="pagination">
+          <button
+            className="btn"
+            disabled={!pagination.hasPrevPage}
+            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          >
+            Previous
+          </button>
+          <span className="pagination-info">
+            Page {pagination.page} of {pagination.pages}
+          </span>
+          <button
+            className="btn"
+            disabled={!pagination.hasNextPage}
+            onClick={() => setPage((prev) => prev + 1)}
+          >
+            Next
+          </button>
+        </div>
+      )}
       <div className="add-client">
         <Link to="/new" className="btn btn-add">
           Add New Client
