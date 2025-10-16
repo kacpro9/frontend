@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import ActionModal from "../components/ActionModal";
 import "./ClientDetails.css";
-import axios from "axios";
+import api from "../api";
 
 export default function ClientDetails() {
   const { id } = useParams();
@@ -12,7 +12,7 @@ export default function ClientDetails() {
 
   const fetchClient = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:3005/clients/${id}`);
+      const res = await api.get(`http://localhost:3005/clients/${id}`);
       setClient(res.data.client);
     } catch (error) {
       console.error("Error fetching client details:", error);
@@ -75,7 +75,7 @@ export default function ClientDetails() {
                   className="btn btn-delete"
                   onClick={async () => {
                     try {
-                      const res = await axios.delete(
+                      const res = await api.delete(
                         `http://localhost:3005/actions/${action._id}`
                       );
                       console.log("Delete response: ", res);

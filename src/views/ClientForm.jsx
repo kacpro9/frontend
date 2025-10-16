@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 import "./ClientForm.css";
 
 const INIT_FORM_STATE = {
@@ -24,7 +24,7 @@ export default function ClientForm() {
     if (id) {
       const fetchClient = async () => {
         try {
-          const res = await axios.get(`http://localhost:3005/clients/${id}`);
+          const res = await api.get(`http://localhost:3005/clients/${id}`);
           const data = res.data;
           setFormData(data.client || data);
         } catch (error) {
@@ -59,7 +59,7 @@ export default function ClientForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios({
+      const res = await api({
         method: id ? "PUT" : "POST",
         url: id
           ? `http://localhost:3005/clients/${id}`
@@ -68,7 +68,7 @@ export default function ClientForm() {
       });
 
       if (res.status === 200 || res.status === 201) {
-        navigate("/clients");
+        navigate("/");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -146,7 +146,7 @@ export default function ClientForm() {
             <button
               type="button"
               className="btn btn-cancel"
-              onClick={() => navigate("/clients")}
+              onClick={() => navigate("/")}
             >
               Cancel
             </button>

@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import axios from "axios";
+import api from "../api";
 import { Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContextProvider";
 
@@ -30,7 +30,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:3005/auth/login", {
+      const res = await api.post("http://localhost:3005/auth/login", {
         email: formData.email,
         password: formData.password,
       });

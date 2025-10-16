@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./ClientList.css";
-import axios from "axios";
 import { AuthContext } from "../context/AuthContextProvider";
+import api from "../api";
 
 export default function ClientList() {
   const { checkIsUserLogged } = useContext(AuthContext);
@@ -13,7 +13,7 @@ export default function ClientList() {
 
   const getClients = async () => {
     try {
-      const res = await axios.get(
+      const res = await api.get(
         `http://localhost:3005/clients?page=${page}&limit=3`
       );
       setClients(res.data.clients);
@@ -31,7 +31,7 @@ export default function ClientList() {
     if (!confirmed) return;
 
     try {
-      await axios.delete("http://localhost:3005/clients/" + clientId, {
+      await api.delete("http://localhost:3005/clients/" + clientId, {
         method: "DELETE",
       });
       getClients();

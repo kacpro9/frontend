@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 import { AuthContext } from "../context/AuthContextProvider";
 
 import "./SignUp.css";
@@ -53,7 +53,7 @@ const SignUp = () => {
 
     if (!validate()) return;
     try {
-      const res = await axios.post("http://localhost:3005/auth/signup", {
+      const res = await api.post("http://localhost:3005/auth/signup", {
         email: formData.email,
         password: formData.password,
       });

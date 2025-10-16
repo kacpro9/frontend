@@ -1,37 +1,52 @@
 import { createContext, useState, useEffect } from "react";
+import api from "../api";
 
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("user")) || null;
+    } catch {
+      return null;
+    }
+  });
 
   useEffect(() => {
-    if (user?.token) {
-      import("axios").then(({ default: axios }) => {
-        axios.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
-      });
+    const resId = api.interceptors.response.use(
+      (res) => res,
+      (err) => {
+        const status = err?.response?.status;
+        if (status === 401 || status === 403) {
+          logout();
+        }
+        return Promise.reject(err);
+      }
+    );
+
+    return () => {
+      api.interceptors.response.eject(resId);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
     } else {
-      import("axios").then(({ default: axios }) => {
-        delete axios.defaults.headers.common["Authorization"];
-      });
+      localStorage.removeItem("user");
     }
   }, [user]);
 
   const login = (userData) => {
-    localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
-    window.location.href = "/";
   };
 
   const logout = () => {
-    localStorage.setItem("user", null);
     setUser(null);
-    window.location.href = "/login";
   };
 
   const checkIsUserLogged = (responseStatus) => {
     if (responseStatus === 403 || responseStatus === 401) {
-      logout();
     }
   };
 
