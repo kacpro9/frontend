@@ -10,11 +10,12 @@ export default function ClientList() {
   const [clients, setClients] = useState([]);
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState(null);
+  const [search, setSearch] = useState("");
 
   const getClients = async () => {
     try {
       const res = await api.get(
-        `http://localhost:3005/clients?page=${page}&limit=3`
+        `http://localhost:3005/clients?page=${page}&limit=3&search=${search}`
       );
       setClients(res.data.clients);
       setPagination(res.data.pagination);
@@ -42,11 +43,23 @@ export default function ClientList() {
 
   useEffect(() => {
     getClients();
-  }, [page]);
+  }, [page, search]);
 
   return (
     <div className="client-list-container">
       <h2>Client List</h2>
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search by name or NIP"
+          value={search}
+          onChange={(e) => {
+            setPage(1);
+            setSearch(e.target.value);
+          }}
+        />
+      </div>
+
       <ul className="client-list">
         {clients.map((client) => (
           <li key={client._id} className="client-item">
